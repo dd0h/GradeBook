@@ -1,0 +1,27 @@
+<div layout:fragment="profile-data" layout:decorate="~{layouts/profile}" xmlns:layout="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <h1> Profile </h1>
+    <table th:each="user:${userinfo}">
+        <tr >
+            <th>Name</th>
+            <td th:text="${user.name}"></td>
+        </tr>
+        <tr>
+            <th>Surname</th>
+            <td th:text="${user.surname}"></td>
+        </tr>
+        <tr>
+            <th>Nick</th>
+            <td th:text="${user.username}"></td>
+        </tr>
+        <tr>
+            <th>E-mail</th>
+            <td th:text="${user.email}"></td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td th:text="${user.status}"></td>
+        </tr>
+    </table>
+    <p>Click <a th:href="@{/home}">here</a> to go back.</p>
+</div>

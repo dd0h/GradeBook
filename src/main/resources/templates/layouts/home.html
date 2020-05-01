@@ -1,0 +1,6 @@
+<div layout:fragment="content" layout:decorate="~{base}" xmlns:layout="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <div sec:authorize="isAnonymous()" th:insert="fragments/actions/user :: form">
+
+    </div>
+</div>
