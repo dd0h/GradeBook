@@ -4,6 +4,7 @@ import com.gradebook.entities.users.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -22,6 +23,7 @@ public class LoginHistory  {
     private Date sign_in_time;
 
     @NotEmpty()
+    @Size(max = 39)
     @Column(nullable = false)
     private String IP;
 
