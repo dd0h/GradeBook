@@ -10,21 +10,28 @@
         <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</p>
 
         <p>Imię: <input type="text" th:field="*{name}" /></p>
-        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Name Error</p>
-
-        <p>Nazwisko: <input type="text" th:field="*{surname}" /></p>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</p>
 
-        <p>Status: <input type="text" th:field="*{status}" /></p>
-        <p th:if="${#fields.hasErrors('name')}" th:errors="*{status}">Name Error</p>
+        <p>Nazwisko: <input type="text" th:field="*{surname}" /></p>
+        <p th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Name Error</p>
 
-        <p>Email: <input type="text" th:field="*{email}" /></p>
+        <p>
+            <label>Status</label>
+            <select class="browser-default" th:field="*{status}" id="status" name="status">
+                <option th:value="STUDENT" th:text="STUDENT" selected></option>
+                <option th:value="TEACHER" th:text="TEACHER"></option>
+            </select>
+        </p>
+        <p th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Name Error</p>
+
+        <p>Email: <input type="email" th:field="*{email}" /></p>
         <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Name Error</p>
 
         <p>Hasło: <input type="password" th:field="*{password}" /></p>
         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Name Error</p>
 
-        <p>Powtórz hasło: <input type="password"/></p>
+        <p>Powtórz hasło: <input type="password" th:field="*{password_repeated}"/></p>
+        <p th:if="${#fields.hasErrors('password_repeated')}" th:errors="*{password_repeated}">Name Error</p>
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
 </div>

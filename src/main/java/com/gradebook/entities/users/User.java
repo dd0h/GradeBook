@@ -41,10 +41,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @NotEmpty()
-    @Size(max = 30)
-    @Column(nullable = true, length = 30)
-    private String status;
+    @Transient
+    @Size(min = 6)
+    private String password_repeated;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Teacher teacher;
@@ -103,11 +105,15 @@ public class User {
         this.password = password;
     }
 
-    public String getStatus() {
+    public String getPassword_repeated() { return password_repeated; }
+
+    public void setPassword_repeated(String password_repeated) { this.password_repeated = password_repeated; }
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

@@ -33,19 +33,22 @@ public class MainController {
                                    BindingResult result,
                                    RedirectAttributes attributes) {
         if (result.hasErrors()) {
-            attributes.addFlashAttribute("register_fail", "Check if you have all fields");
+            attributes.addFlashAttribute("register_fail", "Check if you have all fields!");
             return "fragments/forms/register";
         } else {
             if (userRepository.existsByUsername(user.getUsername())) {
-                attributes.addFlashAttribute("register_fail", "User with that name already exists");
+                attributes.addFlashAttribute("register_fail", "User with that name already exists!");
                 return "redirect:/register";
             } else if (userRepository.existsByEmail(user.getEmail())) {
-                attributes.addFlashAttribute("register_fail", "This email is already in use");
+                attributes.addFlashAttribute("register_fail", "This email is already in use!");
+                return "redirect:/register";
+            } else if(!user.getPassword().equals(user.getPassword_repeated())) {
+                attributes.addFlashAttribute("register_fail", "Passwords do not match!");
                 return "redirect:/register";
             } else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
-                attributes.addFlashAttribute("register_success", "Your registration was successful");
+                attributes.addFlashAttribute("register_success", "Your registration was successful!");
                 return "redirect:/login";
             }
         }
