@@ -1,0 +1,15 @@
+<div layout:fragment="profile-data" layout:decorate="~{layouts/profile}" xmlns:layout="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <h1> Your grades </h1>
+    <table th:each="single_grade:${grades}">
+        <tr >
+            <th>Grade</th>
+            <td th:text="${single_grade.grade}"></td>
+            <th>Subject</th>
+<!--            <td th:text="${single_grade.grade}"></td>-->
+            <th>Given by</th>
+<!--            <td th:text="${single_grade.grade}"></td>-->
+        </tr>
+    </table>
+    <p>Click <a th:href="@{/mainpage}">here</a> to go back.</p>
+</div>
