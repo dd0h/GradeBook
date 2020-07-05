@@ -3,6 +3,8 @@ package com.gradebook;
 
 import com.gradebook.entities.grades.Grades;
 import com.gradebook.entities.grades.GradesRepository;
+import com.gradebook.entities.gradesInfo.GradesInfo;
+import com.gradebook.entities.gradesInfo.GradesInfoRepository;
 import com.gradebook.entities.users.User;
 import com.gradebook.entities.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class MainController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private GradesRepository gradesRepository;
+    private GradesInfoRepository gradesInfoRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -69,8 +71,11 @@ public class MainController {
 
     @GetMapping(path="/grades")
     public String Grades(@AuthenticationPrincipal UserDetailsImpl principal, Model model){
-        User user = userRepository.findByUsername(principal.getUsername()).get();
-        model.addAttribute("grades", gradesRepository.getAllUserGrades(user).get());
+        Integer userId = userRepository.findByUsername(principal.getUsername()).get().getId();
+        Optional<GradesInfo[]> gradesInfo = gradesInfoRepository.getUserGradesInfo(userId);
+        if(gradesInfo.isPresent()) {
+            model.addAttribute("gradesInfo", gradesInfo.get());
+        }
         return "fragments/grades";
     }
 }
