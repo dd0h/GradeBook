@@ -1,9 +1,12 @@
 package com.gradebook;
 
+import com.gradebook.entities.users.Status;
 import com.gradebook.entities.users.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,15 +15,25 @@ public class UserDetailsImpl implements UserDetails {
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
+    private String status;
 
     public UserDetailsImpl(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
+        setStatus(user.getStatus().name());
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Arrays.asList(new SimpleGrantedAuthority(getStatus()));
     }
 
     @Override

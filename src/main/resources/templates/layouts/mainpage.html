@@ -1,7 +1,7 @@
 <div layout:fragment="content" layout:decorate="~{base}" xmlns:layout="http://www.w3.org/1999/xhtml"
      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
     <p>Click <a th:href="@{/info}">here</a> to see your profile.</p>
-    <p>Click <a th:href="@{/grades}">here</a> to see your grades.</p>
+    <p sec:authorize="hasAuthority('STUDENT')">Click <a th:href="@{/grades}">here</a> to see your grades.</p>
     <div sec:authorize="isAuthenticated()" th:insert="fragments/forms/logout :: form">
 
     </div>
