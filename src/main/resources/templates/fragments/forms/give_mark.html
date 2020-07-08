@@ -1,0 +1,22 @@
+<div layout:fragment="form" layout:decorate="~{layouts/profile}" xmlns:layout="http://www.w3.org/1999/xhtml"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <form th:action="@{/give_mark}" th:object="${grade}" method="post">
+        <select th:field="*{user}" th:valueType="com.gradebook.entities.users.User">
+            <option th:each="student:${students}"
+                    th:value="${student.id}"
+                    th:text="${student.name} + ' ' + ${student.surname}">
+            </option>
+        </select>
+        <select th:field="*{grade}">
+            <option th:value="6" th:text="6"></option>
+            <option th:value="5" th:text="5"></option>
+            <option th:value="4" th:text="4"></option>
+            <option th:value="3" th:text="3"></option>
+            <option th:value="2" th:text="2"></option>
+            <option th:value="1" th:text="1"></option>
+        </select>
+        <input type="submit" value="Submit"/>
+    </form>
+
+</div>

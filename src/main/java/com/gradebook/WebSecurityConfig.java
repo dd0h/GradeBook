@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/", "/home", "/register", "/webjars/**").permitAll()
                 .antMatchers("/grades").hasAuthority("STUDENT")
+                .antMatchers("/give_mark").hasAuthority("TEACHER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

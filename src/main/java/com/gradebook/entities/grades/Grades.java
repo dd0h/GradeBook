@@ -15,9 +15,8 @@ public class Grades {
     private int id;
 
     @NotEmpty()
-    @Size(max = 1)
     @Column(nullable = false)
-    private int grade;
+    private String grade;
 
     @ManyToOne
     @JoinColumn(name="student_id", nullable=false)
@@ -31,9 +30,9 @@ public class Grades {
 
     public void setId(int id) { this.id = id; }
 
-    public int getGrade() { return grade; }
+    public String getGrade() { return grade; }
 
-    public void setGrade(int grade) { this.grade = grade; }
+    public void setGrade(String grade) { this.grade = grade; }
 
     public User getUser() { return user; }
 

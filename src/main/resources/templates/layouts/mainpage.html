@@ -2,6 +2,7 @@
      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
     <p>Click <a th:href="@{/info}">here</a> to see your profile.</p>
     <p sec:authorize="hasAuthority('STUDENT')">Click <a th:href="@{/grades}">here</a> to see your grades.</p>
+    <p sec:authorize="hasAuthority('TEACHER')">Click <a th:href="@{/give_mark}">here</a> to give a mark to a student.</p>
     <div sec:authorize="isAuthenticated()" th:insert="fragments/forms/logout :: form">
 
     </div>
