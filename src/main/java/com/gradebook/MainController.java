@@ -1,6 +1,8 @@
 package com.gradebook;
 
 
+import com.gradebook.entities.classes.Class;
+import com.gradebook.entities.classes.ClassRepository;
 import com.gradebook.entities.grades.Grades;
 import com.gradebook.entities.grades.GradesRepository;
 import com.gradebook.entities.gradesInfo.GradesInfo;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -36,16 +39,20 @@ public class MainController {
     @Autowired
     private GradesRepository gradesRepository;
     @Autowired
+    private ClassRepository classRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @GetMapping(path = "/register")
     public String addNewUserForm(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("class", new Class());
         return "fragments/forms/register";
     }
 
     @PostMapping(path = "/register")
     public String addNewUserSubmit(@Valid @ModelAttribute User user,
+                                   @Valid @ModelAttribute Class Class,
                                    BindingResult result,
                                    RedirectAttributes attributes) {
         if (result.hasErrors()) {
@@ -64,6 +71,8 @@ public class MainController {
             } else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
+                Class.setUser(user);
+                classRepository.save(Class);
                 attributes.addFlashAttribute("register_success", "Your registration was successful!");
                 return "redirect:/login";
             }
@@ -73,8 +82,12 @@ public class MainController {
     @GetMapping(path="/info")
     public String Info(@AuthenticationPrincipal UserDetailsImpl principal, Model model){
         Optional<User> user = userRepository.findByUsername(principal.getUsername());
-        if(user.isPresent()){
+        if(user.isPresent()) {
+            Optional<Class> Class = classRepository.findById(user.get().getId());
             model.addAttribute("userinfo", user.get());
+            if(Class.isPresent()) {
+                model.addAttribute("Class", Class.get());
+            }
         }
         return "fragments/userprofile";
     }

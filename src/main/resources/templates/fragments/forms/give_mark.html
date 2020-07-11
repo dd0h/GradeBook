@@ -2,6 +2,7 @@
      xmlns:th="http://www.w3.org/1999/xhtml">
 
     <form th:action="@{/give_mark}" th:object="${grade}" method="post">
+        <!--        Tutaj wcześniej wybór klasy, a dopiero potem uczniowie-->
         <select th:field="*{user}" th:valueType="com.gradebook.entities.users.User">
             <option th:each="student:${students}"
                     th:value="${student.id}"
