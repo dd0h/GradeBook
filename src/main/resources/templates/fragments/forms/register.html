@@ -24,13 +24,11 @@
         </p>
         <p th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Name Error</p>
 
-<!--        Zrobić w JS że zaznaczasz TEACHER i się pojawia to niżej, zaznaczasz STUDENT a to niżej znika-->
-        <p>
+        <p id="select">
             <label>Class</label>
             <select class="browser-default" th:field="${class.className}" id="className" name="className">
-<!--                tutaj pętle wyświetlającą wszystkie klasy-->
-                <option th:value="1A" th:text="1A"></option>
-                <option th:value="1B" th:text="1B"></option>
+                <option th:each="className : ${T(com.gradebook.entities.classes.ClassName).values()}"
+                        th:value="${className}" th:text="${className}"></option>
             </select>
         </p>
 
@@ -45,3 +43,17 @@
         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     </form>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#status").change(function() {
+            var val = $(this).val();
+            if(val === "STUDENT") {
+                $("#select").show();
+            }
+            else if(val === "TEACHER") {
+                $("#select").hide();
+            }
+        });
+    });
+</script>

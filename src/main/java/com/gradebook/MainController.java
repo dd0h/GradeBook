@@ -2,6 +2,7 @@ package com.gradebook;
 
 
 import com.gradebook.entities.classes.Class;
+import com.gradebook.entities.classes.ClassName;
 import com.gradebook.entities.classes.ClassRepository;
 import com.gradebook.entities.grades.Grades;
 import com.gradebook.entities.grades.GradesRepository;
@@ -11,6 +12,7 @@ import com.gradebook.entities.teachers.Teacher;
 import com.gradebook.entities.teachers.TeacherRepository;
 import com.gradebook.entities.users.User;
 import com.gradebook.entities.users.UserRepository;
+import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.swing.text.html.Option;
 import javax.validation.Valid;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -71,8 +75,10 @@ public class MainController {
             } else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
-                Class.setUser(user);
-                classRepository.save(Class);
+                if(user.getStatus().toString().equals("STUDENT")){
+                    Class.setUser(user);
+                    classRepository.save(Class);
+                }
                 attributes.addFlashAttribute("register_success", "Your registration was successful!");
                 return "redirect:/login";
             }
@@ -118,9 +124,19 @@ public class MainController {
             }
         }
 
-        Optional<User[]> students = userRepository.getAllStudents();
-        if(students.isPresent()){
-            model.addAttribute("students", students.get());
+        List<User> students = userRepository.getAllStudents();
+        List<Class> classes = classRepository.findAll();
+        for(ClassName className : ClassName.values()){
+            List<User> usersOfSingleClass = new ArrayList<User>();
+            for(User student : students){
+                for(Class Class : classes){
+                    if(student.getId() == Class.getId() &&  Class.getClassName().toString().equals(className.toString())){
+                        usersOfSingleClass.add(student);
+                    }
+                }
+            }
+            String name = "students_" + className.toString();
+            model.addAttribute(name, usersOfSingleClass);
         }
         return "fragments/give_mark";
     }
