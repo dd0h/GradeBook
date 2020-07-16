@@ -126,18 +126,17 @@ public class MainController {
 
         List<User> students = userRepository.getAllStudents();
         List<Class> classes = classRepository.findAll();
+        List<List<User>> usersSortedByClass = new ArrayList<>();
         for(ClassName className : ClassName.values()){
-            List<User> usersOfSingleClass = new ArrayList<User>();
-            for(User student : students){
-                for(Class Class : classes){
-                    if(student.getId() == Class.getId() &&  Class.getClassName().toString().equals(className.toString())){
+            List<User> usersOfSingleClass = new ArrayList<>();
+            for(User student : students)
+                for(Class Class : classes)
+                    if(student.getId() == Class.getId() &&  Class.getClassName().equals(className.toString()))
                         usersOfSingleClass.add(student);
-                    }
-                }
-            }
-            String name = "students_" + className.toString();
-            model.addAttribute(name, usersOfSingleClass);
+
+            usersSortedByClass.add(usersOfSingleClass);
         }
+        model.addAttribute("usersSortedByClass", usersSortedByClass);
         return "fragments/give_mark";
     }
 

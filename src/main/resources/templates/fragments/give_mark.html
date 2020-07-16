@@ -11,3 +11,22 @@
 
     <p>Click <a th:href="@{/mainpage}">here</a> to go back.</p>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        function hideStudentSelects (){
+            $( 'p[id^=\'p_\']' ).each(function() {
+                $(this).hide();
+            });
+        }
+
+        hideStudentSelects();
+
+        $("#class_select").change(function() {
+            hideStudentSelects();
+            var id = $(this).children(":selected").attr("id");
+            $("#p_" + id).show();
+            $("#select_" + id).attr('name','user');
+        });
+    });
+</script>

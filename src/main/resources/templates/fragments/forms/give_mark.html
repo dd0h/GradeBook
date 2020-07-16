@@ -2,18 +2,25 @@
      xmlns:th="http://www.w3.org/1999/xhtml">
 
     <form th:action="@{/give_mark}" th:object="${grade}" method="post">
-        <!--        Tutaj wcześniej wybór klasy, a dopiero potem uczniowie-->
         <p>
             <label>Class</label>
             <select class="browser-default" id="class_select">
-<!--                <option th:each="className : ${T(com.gradebook.entities.classes.ClassName).values()}"-->
-<!--                        th:value="${className}" th:text="${className}"></option>-->
-                <option value="IIA">IIA</option>
-                <option value="IIB">IIB</option>
+                <option selected>Select class</option>
+                <option th:each="className : ${T(com.gradebook.entities.classes.ClassName).values()}"
+                        th:value="${className}" th:text="${className}" th:id="${classNameStat.index}"></option>
             </select>
         </p>
-        <p id="select_student">DUPA</p>
-        <select th:field="*{grade}">
+        <p th:each="class:${usersSortedByClass}" th:id="'p_'+${classStat.index}">
+            <label>Student</label>
+            <select th:valueType="com.gradebook.entities.users.User" th:id="'select_'+${classStat.index}">
+                <option th:each="student:${class}"
+                        th:value="${student.id}"
+                        th:text="${student.name} + ' ' + ${student.surname}">
+                </option>
+            </select>
+        </p>
+        <label>Grade</label>
+        <select id="select_grade" th:field="*{grade}">
             <option th:value="6" th:text="6"></option>
             <option th:value="5" th:text="5"></option>
             <option th:value="4" th:text="4"></option>
@@ -25,19 +32,3 @@
     </form>
 
 </div>
-
-
-<!--doesnt work yet-->
-<script type="text/javascript">
-    $(function () {
-        $("#class_select").change(function() {
-            var val = $(this).val();
-            if(val === "IIA") {
-                $("#select_student").show();
-            }
-            else if(val === "IIB") {
-                $("#select_student").hide();
-            }
-        });
-    });
-</script>

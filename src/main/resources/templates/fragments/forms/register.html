@@ -24,6 +24,7 @@
         </p>
         <p th:if="${#fields.hasErrors('status')}" th:errors="*{status}">Name Error</p>
 
+<!--        Add a teacher to table if selected!-->
         <p id="select">
             <label>Class</label>
             <select class="browser-default" th:field="${class.className}" id="className" name="className">
