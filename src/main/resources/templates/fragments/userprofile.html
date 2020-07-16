@@ -22,11 +22,15 @@
             <th>Status</th>
             <td th:text="${user.status}"></td>
         </tr>
-<!--        For teachers - subject which it learns-->
-        <tr>
+        <tr th:if="${user.status == T(com.gradebook.entities.users.Status).STUDENT}">
             <th>Class</th>
-            <td th:text="${Class.className}"></td>
+            <td th:text="${Class.className.displayValue}"></td>
+        </tr>
+        <tr th:if="${user.status == T(com.gradebook.entities.users.Status).TEACHER}">
+            <th>Subject</th>
+            <td th:text="${teacher.subject.displayValue}"></td>
         </tr>
     </table>
+
     <p>Click <a th:href="@{/mainpage}">here</a> to go back.</p>
 </div>

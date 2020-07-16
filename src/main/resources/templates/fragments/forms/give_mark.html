@@ -7,7 +7,7 @@
             <select class="browser-default" id="class_select">
                 <option selected>Select class</option>
                 <option th:each="className : ${T(com.gradebook.entities.classes.ClassName).values()}"
-                        th:value="${className}" th:text="${className}" th:id="${classNameStat.index}"></option>
+                        th:value="${className}" th:text="${className.displayValue}" th:id="${classNameStat.index}"></option>
             </select>
         </p>
         <p th:each="class:${usersSortedByClass}" th:id="'p_'+${classStat.index}">

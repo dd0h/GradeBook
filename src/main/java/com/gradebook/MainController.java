@@ -8,8 +8,10 @@ import com.gradebook.entities.grades.Grades;
 import com.gradebook.entities.grades.GradesRepository;
 import com.gradebook.entities.gradesInfo.GradesInfo;
 import com.gradebook.entities.gradesInfo.GradesInfoRepository;
+import com.gradebook.entities.teachers.Subject;
 import com.gradebook.entities.teachers.Teacher;
 import com.gradebook.entities.teachers.TeacherRepository;
+import com.gradebook.entities.users.Status;
 import com.gradebook.entities.users.User;
 import com.gradebook.entities.users.UserRepository;
 import org.graalvm.compiler.lir.LIRInstruction;
@@ -51,12 +53,14 @@ public class MainController {
     public String addNewUserForm(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("class", new Class());
+        model.addAttribute("teacher", new Teacher());
         return "fragments/forms/register";
     }
 
     @PostMapping(path = "/register")
     public String addNewUserSubmit(@Valid @ModelAttribute User user,
                                    @Valid @ModelAttribute Class Class,
+                                   @Valid @ModelAttribute Teacher teacher,
                                    BindingResult result,
                                    RedirectAttributes attributes) {
         if (result.hasErrors()) {
@@ -75,9 +79,12 @@ public class MainController {
             } else {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 userRepository.save(user);
-                if(user.getStatus().toString().equals("STUDENT")){
+                if(user.getStatus().toString().equals(Status.STUDENT.toString())){
                     Class.setUser(user);
                     classRepository.save(Class);
+                } else if(user.getStatus().toString().equals(Status.TEACHER.toString())){
+                    teacher.setUser(user);
+                    teacherRepository.save(teacher);
                 }
                 attributes.addFlashAttribute("register_success", "Your registration was successful!");
                 return "redirect:/login";
@@ -89,10 +96,17 @@ public class MainController {
     public String Info(@AuthenticationPrincipal UserDetailsImpl principal, Model model){
         Optional<User> user = userRepository.findByUsername(principal.getUsername());
         if(user.isPresent()) {
-            Optional<Class> Class = classRepository.findById(user.get().getId());
             model.addAttribute("userinfo", user.get());
-            if(Class.isPresent()) {
-                model.addAttribute("Class", Class.get());
+            if(user.get().getStatus() == Status.STUDENT){
+                Optional<Class> Class = classRepository.findById(user.get().getId());
+                if(Class.isPresent()) {
+                    model.addAttribute("Class", Class.get());
+                }
+            } else if(user.get().getStatus() == Status.TEACHER){
+                Optional<Teacher> teacher = teacherRepository.findById(user.get().getId());
+                if(teacher.isPresent()) {
+                    model.addAttribute("teacher", teacher.get());
+                }
             }
         }
         return "fragments/userprofile";
@@ -119,7 +133,7 @@ public class MainController {
             Integer teacherId = user.get().getId();
             Optional<Teacher> teacher = teacherRepository.findById(teacherId);
             if(teacher.isPresent()){
-                String subject = teacher.get().getSubject();
+                Subject subject = teacher.get().getSubject();
                 model.addAttribute("subject", subject);
             }
         }
@@ -131,7 +145,7 @@ public class MainController {
             List<User> usersOfSingleClass = new ArrayList<>();
             for(User student : students)
                 for(Class Class : classes)
-                    if(student.getId() == Class.getId() &&  Class.getClassName().equals(className.toString()))
+                    if(student.getId() == Class.getId() &&  Class.getClassName().equals(className))
                         usersOfSingleClass.add(student);
 
             usersSortedByClass.add(usersOfSingleClass);

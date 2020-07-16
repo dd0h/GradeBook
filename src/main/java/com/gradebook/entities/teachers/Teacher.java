@@ -19,9 +19,8 @@ public class Teacher {
     @MapsId
     private User user;
 
-    @NotEmpty()
-    @Column(nullable = false)
-    private String subject;
+    @Enumerated(EnumType.STRING)
+    private Subject subject;
 
     @OneToMany(mappedBy = "teacher")
     private Set<Grades> grades;
@@ -42,11 +41,11 @@ public class Teacher {
         this.user = user;
     }
 
-    public String getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(Subject subject) {
         this.subject = subject;
     }
 

@@ -17,9 +17,8 @@ public class Class {
     @MapsId
     private User user;
 
-    @NotEmpty()
-    @Column(nullable = false)
-    private String className;
+    @Enumerated(EnumType.STRING)
+    private ClassName className;
 
     public int getId() {
         return id;
@@ -37,11 +36,7 @@ public class Class {
         this.user = user;
     }
 
-    public String getClassName() {
-        return className;
-    }
+    public ClassName getClassName() { return className; }
 
-    public void setClassName(String className) {
-        this.className = className;
-    }
+    public void setClassName(ClassName className) { this.className = className; }
 }

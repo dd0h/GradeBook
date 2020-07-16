@@ -1,7 +1,7 @@
 <div layout:fragment="profile-data" layout:decorate="~{layouts/profile}" xmlns:layout="http://www.w3.org/1999/xhtml"
      xmlns:th="http://www.w3.org/1999/xhtml">
     <h1> Give a mark to a student </h1>
-    <h2>Your subject: <b th:text="${subject}"></b></h2>
+    <h2>Your subject: <b th:text="${subject.displayValue}"></b></h2>
 
     <div th:insert="fragments/forms/give_mark :: form"></div>
 
