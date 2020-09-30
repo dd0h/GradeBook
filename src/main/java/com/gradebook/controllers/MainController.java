@@ -1,6 +1,7 @@
-package com.gradebook;
+package com.gradebook.controllers;
 
 
+import com.gradebook.UserDetailsImpl;
 import com.gradebook.entities.classes.Class;
 import com.gradebook.entities.classes.ClassName;
 import com.gradebook.entities.classes.ClassRepository;
@@ -46,51 +47,6 @@ public class MainController {
     private GradesRepository gradesRepository;
     @Autowired
     private ClassRepository classRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @GetMapping(path = "/register")
-    public String addNewUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("class", new Class());
-        model.addAttribute("teacher", new Teacher());
-        return "fragments/forms/register";
-    }
-
-    @PostMapping(path = "/register")
-    public String addNewUserSubmit(@Valid @ModelAttribute User user,
-                                   @Valid @ModelAttribute Class Class,
-                                   @Valid @ModelAttribute Teacher teacher,
-                                   BindingResult result,
-                                   RedirectAttributes attributes) {
-        if (result.hasErrors()) {
-            attributes.addFlashAttribute("register_fail", "Check if you have all fields!");
-            return "fragments/forms/register";
-        } else {
-            if (userRepository.existsByUsername(user.getUsername())) {
-                attributes.addFlashAttribute("register_fail", "User with that name already exists!");
-                return "redirect:/register";
-            } else if (userRepository.existsByEmail(user.getEmail())) {
-                attributes.addFlashAttribute("register_fail", "This email is already in use!");
-                return "redirect:/register";
-            } else if(!user.getPassword().equals(user.getPassword_repeated())) {
-                attributes.addFlashAttribute("register_fail", "Passwords do not match!");
-                return "redirect:/register";
-            } else {
-                user.setPassword(passwordEncoder.encode(user.getPassword()));
-                userRepository.save(user);
-                if(user.getStatus().toString().equals(Status.STUDENT.toString())){
-                    Class.setUser(user);
-                    classRepository.save(Class);
-                } else if(user.getStatus().toString().equals(Status.TEACHER.toString())){
-                    teacher.setUser(user);
-                    teacherRepository.save(teacher);
-                }
-                attributes.addFlashAttribute("register_success", "Your registration was successful!");
-                return "redirect:/login";
-            }
-        }
-    }
 
     @GetMapping(path="/info")
     public String Info(@AuthenticationPrincipal UserDetailsImpl principal, Model model){
@@ -156,7 +112,6 @@ public class MainController {
 
     @PostMapping(path="/give_mark")
     public String GiveMarkSubmit(@Valid @ModelAttribute Grades grade,
-                                 BindingResult result,
                                  RedirectAttributes attributes,
                                  @AuthenticationPrincipal UserDetailsImpl principal){
         if (grade.getUser()!=null){
