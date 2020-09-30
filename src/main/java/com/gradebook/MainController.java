@@ -159,11 +159,15 @@ public class MainController {
                                  BindingResult result,
                                  RedirectAttributes attributes,
                                  @AuthenticationPrincipal UserDetailsImpl principal){
-        Teacher teacher = new Teacher();
-        teacher.setId(userRepository.findByUsername(principal.getUsername()).get().getId());
-        grade.setTeacher(teacher);
-        gradesRepository.save(grade);
-        attributes.addFlashAttribute("mark_given", "You have succesfully given a mark to a student");
+        if (grade.getUser()!=null){
+            Teacher teacher = new Teacher();
+            teacher.setId(userRepository.findByUsername(principal.getUsername()).get().getId());
+            grade.setTeacher(teacher);
+            gradesRepository.save(grade);
+            attributes.addFlashAttribute("mark_given", "You have succesfully given a mark to a student");
+        } else {
+            attributes.addFlashAttribute("giving_mark_fail", "Select the student you want to give a mark!");
+        }
         return "redirect:/give_mark";
     }
 }

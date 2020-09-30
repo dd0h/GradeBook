@@ -9,6 +9,10 @@
         <p th:text="${mark_given}"></p>
     </div>
 
+    <div th:if="${giving_mark_fail}">
+        <p th:text="${giving_mark_fail}"></p>
+    </div>
+
     <p>Click <a th:href="@{/mainpage}">here</a> to go back.</p>
 </div>
 
